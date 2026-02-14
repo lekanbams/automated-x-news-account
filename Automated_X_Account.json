@@ -1,0 +1,1317 @@
+{
+  "name": "Lithium X Account (MiraSeas)",
+  "nodes": [
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "processed"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1408,
+        -112
+      ],
+      "id": "0fa11c68-8e01-46ca-95db-5888adbf168a",
+      "name": "Article_Memory"
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitterTool",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        -112
+      ],
+      "id": "2efda59a-c98c-4f84-9734-2a1545c38682",
+      "name": "Tweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "YOUR_TWITTEROAUTH2API_CREDENTIAL_ID",
+          "name": "X (Twitter) OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "tweeted",
+        "contextWindowLength": 4
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1152,
+        624
+      ],
+      "id": "4e331cbe-35b9-4799-9dfe-9f4414960dd1",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "inReplyToStatusId": {
+            "__rl": true,
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Reply_to_Tweet', ``, 'string') }}",
+            "mode": "id"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.twitterTool",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        624
+      ],
+      "id": "7c8e34b5-6945-40d8-b239-757d9f8c8bca",
+      "name": "create_thread_tweets",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "YOUR_TWITTEROAUTH2API_CREDENTIAL_ID",
+          "name": "X (Twitter) OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitterTool",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        624
+      ],
+      "id": "f3ab4cf1-b6ed-48d0-bcc8-9f08e9acd60c",
+      "name": "create_top_tweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "YOUR_TWITTEROAUTH2API_CREDENTIAL_ID",
+          "name": "X (Twitter) OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "=",
+        "jsCode": "const seconds = 50;\nawait new Promise(resolve => setTimeout(resolve, seconds * 1000));\n\nreturn \"Waited successfully for \" + seconds + \" seconds\";"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        1424,
+        624
+      ],
+      "id": "11870da1-ead3-4c39-9b0e-5fcff1d69870",
+      "name": "delay"
+    },
+    {
+      "parameters": {
+        "content": "## Generate and Post Threads\n",
+        "height": 592,
+        "width": 784,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        944,
+        240
+      ],
+      "id": "0b5043be-b3ae-4108-8528-127b780d6375",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Generate and Post Single Tweets\n\n",
+        "height": 592,
+        "width": 560,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        -480
+      ],
+      "id": "ed4d3358-9085-49ce-ab9a-8d44afca8c7b",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Searches and retrieves Lithium News using RSS feeds",
+        "height": 416,
+        "width": 800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        256
+      ],
+      "id": "12bcf9d7-8c99-4a86-835f-cc93f6754c35",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 10,
+              "triggerAtMinute": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1296,
+        432
+      ],
+      "id": "59d4a955-13f9-4520-bd96-d054d02d24f9",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bd6e41e2-6d17-45ef-bee5-bc0dc9b7fb4b",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "2902b877-f161-4fa6-94db-c30cb6795246",
+              "name": "description",
+              "value": "={{ $json.contentSnippet }}",
+              "type": "string"
+            },
+            {
+              "id": "57cb2c54-82e5-42cf-b723-edbf7bc9a6ca",
+              "name": "content:encoded",
+              "value": "={{ $json.content }}",
+              "type": "string"
+            },
+            {
+              "id": "df0c76e0-4fc3-4cb2-8e6b-4324b70003cb",
+              "name": "pubDate",
+              "value": "={{ $json.pubDate }}",
+              "type": "string"
+            },
+            {
+              "id": "9b50e79d-5050-4aa0-94c1-f0ae22ba344a",
+              "name": "url",
+              "value": "={{ $json.link }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -832,
+        432
+      ],
+      "id": "41417588-7ec1-4832-93e7-28d58b9aae23",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "html": "={{ $json['content:encoded'] }}",
+        "destinationKey": "content:raw",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        672,
+        432
+      ],
+      "id": "f7cc4ad5-add5-4a29-a0e0-3a54dc579d17",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        816,
+        432
+      ],
+      "id": "56589f78-6562-4528-b5ee-cec6302854a1",
+      "name": "Wait",
+      "webhookId": "GENERATED_ON_IMPORT"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -256,
+        432
+      ],
+      "id": "e5d7ba23-ba82-4d02-97fb-c95c011fa245",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code Node: Parse AI Response and Merge with Original Data (FIXED)\nconst aiResults = $input.all();\nconst originalArticles = $('Pick most recent 5').all(); // Reference the prepare node\n\nconst categorized = aiResults.map((aiItem, index) => {\n    let aiResponse;\n    \n    try {\n        // Get AI response text\n        const responseText = aiItem.json.choices?.[0]?.message?.content || \n                           aiItem.json.content?.[0]?.text || \n                           aiItem.json.text || \n                           '{}';\n        \n        // Remove markdown code blocks if present\n        const cleanJson = responseText\n            .replace(/```json\\n?/g, '')\n            .replace(/```\\n?/g, '')\n            .trim();\n        \n        // Parse JSON\n        aiResponse = JSON.parse(cleanJson);\n        \n    } catch (error) {\n        console.error(`Failed to parse AI response for item ${index}:`, error);\n        aiResponse = {\n            has_company_mention: false,\n            mentioned_companies: [],\n            company_count: 0,\n            primary_company: null,\n            confidence: 'low',\n            error: 'Failed to parse AI response'\n        };\n    }\n    \n    // Get corresponding original article from the prepare node\n    const originalData = originalArticles[index]?.json?.original_data || {};\n    \n    return {\n        json: {\n            // Original article fields from original_data\n            title: originalData.title || '',\n            description: originalData.description || '',\n            'content:encoded': originalData['content:encoded'] || '',\n            pubDate: originalData.pubDate || '',\n            url: originalData.url || '',\n            \n            // AI Analysis Results\n            has_company_mention: aiResponse.has_company_mention || false,\n            mentioned_companies: aiResponse.mentioned_companies || [],\n            company_count: aiResponse.company_count || 0,\n            primary_company: aiResponse.primary_company || null,\n            ai_confidence: aiResponse.confidence || 'unknown',\n            \n            // Category for routing\n            category: aiResponse.has_company_mention ? 'company_mention' : 'general',\n            \n            // Metadata\n            processed_date: new Date().toISOString(),\n            item_index: index,\n            analysis_status: aiResponse.error ? 'failed' : 'success'\n        }\n    };\n});\n\nreturn categorized;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        416
+      ],
+      "id": "71c91f3b-ab94-4686-9b85-8114c0cb8573",
+      "name": "Parse and merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c7a5b044-4a22-45fa-bcd6-8d6900f397e9",
+              "leftValue": "={{ $json.has_company_mention }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        128,
+        416
+      ],
+      "id": "12dc7ace-6311-44d3-bba5-406559aa512a",
+      "name": "Sort based on company mentions"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        304,
+        320
+      ],
+      "id": "903c7076-a309-4c6b-8fc8-0ea3946935f0",
+      "name": "Halt"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        592
+      ],
+      "id": "4dcfd6b7-26f7-4734-b969-ff99e512a0d2",
+      "name": "Wait 5 secs",
+      "webhookId": "GENERATED_ON_IMPORT"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-5-20250929",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-5-20250929"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Analyze this mining industry article for company mentions.\n\nARTICLE:\nTitle: {{ $json.title }}\nDescription: {{ $json.description }}\nContent: {{ $json.content }}\nURL: {{ $json.url }}\n\nIdentify if this article mentions specific companies, mining firms, or project operators.\n\nRespond with ONLY this JSON (no markdown, no extra text):\n{\n  \"has_company_mention\": true or false,\n  \"mentioned_companies\": [\"Company Name 1\", \"Company Name 2\"],\n  \"company_count\": 0,\n  \"primary_company\": \"Most prominent company or null\",\n  \"confidence\": \"high, medium, or low\"\n}\n\n",
+              "role": "assistant"
+            },
+            {
+              "content": "Execute !"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        592
+      ],
+      "id": "08186867-4879-4b30-bc03-5b427e308c4d",
+      "name": "Analyse articles",
+      "credentials": {
+        "anthropicApi": {
+          "id": "YOUR_ANTHROPICAPI_CREDENTIAL_ID",
+          "name": "Anthropic Claude API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Filter for company mentions/references\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+        "height": 576,
+        "width": 832,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        256
+      ],
+      "id": "752758ff-d64b-4497-b4cc-dfe0cdb45af2",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Return only the first item from the input array\nreturn [items[0]];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        432
+      ],
+      "id": "2068086f-e103-4595-94c3-4c9e000d71e8",
+      "name": "Pick first item"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code Node: Prepare Single Articles for AI Analysis\nconst items = $input.all();\n\nreturn items.map((item, index) => {\n    // Extract clean text from content:encoded\n    const contentEncoded = item.json['content:encoded'] || '';\n    const cleanContent = contentEncoded\n        .replace(/<[^>]*>/g, ' ')\n        .replace(/&nbsp;/g, ' ')\n        .replace(/&#8217;/g, \"'\")\n        .replace(/&#8220;|&#8221;/g, '\"')\n        .replace(/&amp;/g, '&')\n        .replace(/\\s+/g, ' ')\n        .trim();\n    \n    return {\n        json: {\n            id: index,\n            title: item.json.title || '',\n            description: item.json.description || '',\n            content: cleanContent.substring(0, 2000),\n            url: item.json.url || '',\n            pubDate: item.json.pubDate || '',\n            original_data: item.json\n        }\n    };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        432
+      ],
+      "id": "d301b069-5fab-4860-803c-a8d5d947a7ba",
+      "name": "Prepare for filtering"
+    },
+    {
+      "parameters": {
+        "content": "## Searches and retrieves Lithium News using RSS feeds",
+        "height": 416,
+        "width": 880
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        -480
+      ],
+      "id": "eed36984-da44-4b6e-97fa-756a187aae11",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 8,
+              "triggerAtMinute": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1296,
+        -304
+      ],
+      "id": "56803d36-05bc-41ca-b76d-eebfa68eaa91",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "html": "={{ $json['content:encoded'] }}",
+        "destinationKey": "content:raw",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -304
+      ],
+      "id": "976adb5e-5b6f-477d-b6e1-6bdb3f1a8dcd",
+      "name": "Markdown1"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        976,
+        -304
+      ],
+      "id": "f728291c-8f0c-4cad-89a9-dfe9e469a3d3",
+      "name": "Wait1",
+      "webhookId": "GENERATED_ON_IMPORT"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -144,
+        -304
+      ],
+      "id": "8cac19c0-ccaa-406f-b22e-a0cbc427ad39",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code Node: Parse AI Response and Merge with Original Data (FIXED)\nconst aiResults = $input.all();\nconst originalArticles = $('Pick most recent ').all(); // Reference the prepare node\n\nconst categorized = aiResults.map((aiItem, index) => {\n    let aiResponse;\n    \n    try {\n        // Get AI response text\n        const responseText = aiItem.json.choices?.[0]?.message?.content || \n                           aiItem.json.content?.[0]?.text || \n                           aiItem.json.text || \n                           '{}';\n        \n        // Remove markdown code blocks if present\n        const cleanJson = responseText\n            .replace(/```json\\n?/g, '')\n            .replace(/```\\n?/g, '')\n            .trim();\n        \n        // Parse JSON\n        aiResponse = JSON.parse(cleanJson);\n        \n    } catch (error) {\n        console.error(`Failed to parse AI response for item ${index}:`, error);\n        aiResponse = {\n            has_company_mention: false,\n            mentioned_companies: [],\n            company_count: 0,\n            primary_company: null,\n            confidence: 'low',\n            error: 'Failed to parse AI response'\n        };\n    }\n    \n    // Get corresponding original article from the prepare node\n    const originalData = originalArticles[index]?.json?.original_data || {};\n    \n    return {\n        json: {\n            // Original article fields from original_data\n            title: originalData.title || '',\n            description: originalData.description || '',\n            'content:encoded': originalData['content:encoded'] || '',\n            pubDate: originalData.pubDate || '',\n            url: originalData.url || '',\n            \n            // AI Analysis Results\n            has_company_mention: aiResponse.has_company_mention || false,\n            mentioned_companies: aiResponse.mentioned_companies || [],\n            company_count: aiResponse.company_count || 0,\n            primary_company: aiResponse.primary_company || null,\n            ai_confidence: aiResponse.confidence || 'unknown',\n            \n            // Category for routing\n            category: aiResponse.has_company_mention ? 'company_mention' : 'general',\n            \n            // Metadata\n            processed_date: new Date().toISOString(),\n            item_index: index,\n            analysis_status: aiResponse.error ? 'failed' : 'success'\n        }\n    };\n});\n\nreturn categorized;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        -320
+      ],
+      "id": "94ce85b0-2c7f-418e-8e64-4e251cd75c31",
+      "name": "Parse and merge1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c7a5b044-4a22-45fa-bcd6-8d6900f397e9",
+              "leftValue": "={{ $json.has_company_mention }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        256,
+        -320
+      ],
+      "id": "51ab9a92-173c-4ee5-8171-58d66ae25ec2",
+      "name": "Sort based on company mentions1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        448,
+        -416
+      ],
+      "id": "e82a3cd3-724f-4fa9-bddf-10ad22c504c9",
+      "name": "Halt1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        368,
+        -144
+      ],
+      "id": "c1311bd0-8021-49f5-b955-cbc2d95104d8",
+      "name": "Wait 5 secs1",
+      "webhookId": "GENERATED_ON_IMPORT"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-5-20250929",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-5-20250929"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Analyze this mining industry article for company mentions.\n\nARTICLE:\nTitle: {{ $json.title }}\nDescription: {{ $json.description }}\nContent: {{ $json.content }}\nURL: {{ $json.url }}\n\nIdentify if this article mentions specific companies, mining firms, or project operators.\n\nRespond with ONLY this JSON (no markdown, no extra text):\n{\n  \"has_company_mention\": true or false,\n  \"mentioned_companies\": [\"Company Name 1\", \"Company Name 2\"],\n  \"company_count\": 0,\n  \"primary_company\": \"Most prominent company or null\",\n  \"confidence\": \"high, medium, or low\"\n}\n\n",
+              "role": "assistant"
+            },
+            {
+              "content": "Execute !"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        48,
+        -144
+      ],
+      "id": "45ed38f6-68a2-42e9-bf6b-b63cf0740a70",
+      "name": "Analyse articles1",
+      "credentials": {
+        "anthropicApi": {
+          "id": "YOUR_ANTHROPICAPI_CREDENTIAL_ID",
+          "name": "Anthropic Claude API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Filter for company mentions/references\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+        "height": 576,
+        "width": 880,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -480
+      ],
+      "id": "58bebd0d-cb2f-4139-847e-19766b3e6f87",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Return only the first item from the input array\nreturn [items[0]];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        -304
+      ],
+      "id": "90a8c982-d20c-4b0e-9c86-7043b1d26571",
+      "name": "Pick first item1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please analyze this article:\n\nTITLE: {{ $json.title }}\nSUMMARY: {{ $json.description }}\nCONTENT:  {{ $json['content:raw'] }}\nURL:  {{ $json.url }}",
+        "options": {
+          "systemMessage": "=# Role\nYou are \"CommodityBot,\" a Senior Market Analyst and Social Media Strategist specializing in critical minerals (specifically Rare Earth Elements). Your audience consists of retail and institutional investors looking for \"alpha\" (market edge) and breaking news.\n\n# Input Data\nYou will receive a news article containing:\n1. Title\n2. Summary\n3. News Content\n4. URL (article link)\n\n# Tools\nYou have access to the following tools:\n1. **Article_Memory:** Memory tool to check and save processed articles.\n2. **Tweet:** To post tweets directly to X (Twitter).\n\n# Required Workflow\nYou must adhere to this strict sequence:\n\n1. **CHECK HISTORY:** Use your memory tool to check if the `Title` or `URL` of the incoming article has been processed before.\n\n2. **DECISION:**\n   * **IF FOUND in Memory:** STOP immediately. Return the string: \"SKIPPING: Article already processed.\"\n   * **IF NOT FOUND:** Proceed to step 3.\n\n3. **ANALYZE:** Read the content to identify the key investment implication (e.g., supply shock, price impact, geopolitics, production changes).\n\n4. **DRAFT:** Create a tweet following the \"Tweet Format\" below. MUST include the article URL.\n\n5. **EXECUTE (POST TO X):** Use the **Tweet** tool to post your drafted text. *Do not just output the text; you must run the tool.*\n\n6. **SAVE TO MEMORY:** After the tweet is successfully sent, store both the `Title` and `URL` into your memory tool so it is not repeated.\n\n# Tweet Format\n\n**MANDATORY STRUCTURE:**\n\n[Compelling headline statement about the news]\n\n[1-2 sentences on why this matters for prices/markets]\n\n[Article URL]\n\n**Example:**\n```\nUtah unveils massive critical minerals deposit - potentially North America's most significant find.\n\nIonic MT's discovery includes 16 strategic minerals with easier extraction than traditional hard-rock mining. Could reshape US supply independence.\n\nhttps://mining.com/article-url\n```\n\n# Tweet Constraints\n\n* **Total Length:** Under 280 characters (URLs count as 23 characters when posted)\n* **MUST Include:** Article URL on its own line at the end\n* **Tone:** Professional, insightful, urgent, \"smart money\" edge\n* **Focus:** Investment implications - supply, demand, pricing, geopolitics\n* **Tags:** Include 1-2 relevant hashtags ONLY if they fit naturally (#Lithium, #RareEarths, #CriticalMinerals)\n* **Structure:**\n  * Line 1: The headline/what happened\n  * Line 2-3: The market implication/why it matters\n  * Line 4: Article link (MANDATORY)\n\n# Critical Rules\n\n1. **ALWAYS include the article URL** - this is non-negotiable\n2. The URL must be on its own line at the end\n3. Keep the commentary concise to leave room for the URL\n4. Focus on actionable intelligence, not generic news summaries\n5. Use hard data/numbers when available (percentages, dollar amounts, tonnage)\n6. Avoid clickbait - be direct and factual\n\n# Goal\nYour final action must be posting the tweet via the tool, and the tweet MUST contain the article URL."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        -352
+      ],
+      "id": "749f7aeb-35da-4915-8ae7-ff728a4de44f",
+      "name": "TweetBot"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please process the following news article for the audience: Mining company Investors.\n\nArticle Title: {{ $json.title }}\nArticle URL: {{ $json.url }}\nShort Description: {{ $json.description }}\nFull Content: {{ $json['content:raw'] }}",
+        "options": {
+          "systemMessage": "=You are \"ThreadBot,\" an expert social media manager. Your job is to convert the provided news article into an engaging 4-tweet thread, but you MUST NEVER post about the same news twice and you MUST keep EACH TWEET UNDER 260 characters\n\nYour Input Data: You have received a single news article containing a title, description, content (in Markdown), and url.\n\nYour Memory: Your internal memory automatically records every action you take.\n\nYour Goal: Check if this specific article (identified by its url or title) has been processed before. If it is new, create and post a 4-tweet thread using the provided content. If it has been processed before, skip it.\n\nYou Have These Tools:\n\ncreate_top_tweet: Posts the first tweet.\n\ncreate_thread_tweets(reply_to_id, text): Creates the replies to each previous tweet, forming a coherent thread.\n\ndelay: Pauses the workflow to prevent server errors. MUST be used between every tweet.\n\nYour Required Workflow (MANDATORY):\n\nCheck Memory (Internal):\n\nReview your conversation/action history to see if the Article URL or Title has ever been processed in a previous run.\n\nAnalyze & Decide:\n\nIF you find a record of this article in your memory:\n\nABORT. Stop immediately. Do not generate any tweets. Output a message stating: \"Duplicate article detected. Skipping.\"\n\nIF the article is completely new:\n\nPROCEED to the next step.\n\nDraft Thread:\n\nAnalyze the provided news article title, description and content. Do not try to visit the URL; use the text already given to you.\n\nDraft a 4-tweet thread (max 270 characters per tweet) based on the \"Engaging Tweet Criteria\" below.\n\nTailor the tone, language, and complexity for a critical minerals blog.\n\nExecute (Post Tweets):\n\nTweet 1: Call create_top_tweet with the text for the first tweet.\n\nDELAY: Call the delay tool to pause execution.\n\nTweet 2: Call create_thread_tweets, replying to the previous tweet ID.\n\nDELAY: Call the delay tool to pause execution.\n\nTweet 3: Call create_thread_tweets, replying to the previous tweet ID.\n\nDELAY: Call the delay tool to pause execution.\n\nTweet 4: Call create_thread_tweets, replying to the previous tweet ID.\n\n(By completing these steps, your Memory will automatically save this run, preventing this article from being processed again.)\n\nAfter Saving this run, END execution workflow\n\nEngaging Tweet Criteria:\n\nTweet 1 (The Hook): Open with the most striking, attention-grabbing statement or revelation from the news. Make it bold and immediate\u2014highlight the \"wow\" factor, the surprising angle, or the critical development that will stop scrollers. Keep it punchy and declarative. End with a thread indicator: \"\ud83e\uddf5\ud83d\udc47\"\n\nTweet 2 (The Core): Deliver the \"what\" and \"why.\" Use 1-2 clear, impactful sentences. Use emojis (e.g., \ud83d\udca1, \ud83d\udcc8, \u26a1\ufe0f) to add visual interest.\n\nTweet 3 (The Data): Provide key numbers, a surprising fact, or a direct quote from the provided text. Use bullet points (\u2022) for scannability.\n\nTweet 4 (The Kicker): Conclude with the main takeaway or a forward-looking question. Add 2-3 relevant hashtags."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        336
+      ],
+      "id": "41dda7a6-6cb8-48ef-a504-963e2481de9d",
+      "name": "ThreadBot"
+    },
+    {
+      "parameters": {
+        "url": "https://www.google.com.ng/alerts/feeds/04191773567166014170/10122071728173733796",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -1120,
+        432
+      ],
+      "id": "6c97baf0-67e5-45d5-8897-c1a991912b24",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop through each item in the incoming data\nfor (const item of items) {\n  try {\n    const googleUrl = item.json.link;\n\n    // Check if the link exists and contains the Google pattern\n    if (googleUrl && googleUrl.includes('google.com/url') && googleUrl.includes('url=')) {\n      \n      // Method: Split the string to grab everything after 'url='\n      // We use split to handle cases where the URL might not be fully encoded\n      let rawSplit = googleUrl.split('url=')[1];\n      \n      // If you want the CLEAN link (Recommended - removes &ct, &usg, etc.)\n      // We split by '&' to stop where the Google parameters start\n      let cleanLink = rawSplit.split('&')[0];\n      \n      // Decode the URL just in case it contains %20 or other encoded characters\n      cleanLink = decodeURIComponent(cleanLink);\n\n      // Update the item's link field\n      item.json.link = cleanLink;\n    }\n    \n  } catch (error) {\n    // If something goes wrong with one link, skip it and continue to the next\n    continue;\n  }\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -976,
+        432
+      ],
+      "id": "f12a328a-a806-45c4-ade1-8a9a93a6a350",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code Node: Get 5 Most Recent Items (Sorted by Date)\nconst items = $input.all();\n\n// Sort by pubDate (newest first)\nconst sortedItems = items.sort((a, b) => {\n    const dateA = new Date(a.json.pubDate || a.json.date || 0);\n    const dateB = new Date(b.json.pubDate || b.json.date || 0);\n    \n    // Sort descending (newest first)\n    return dateB - dateA;\n});\n\n// Take the first 10\nconst recentItems = sortedItems.slice(0, 5);\n\nreturn recentItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -496,
+        432
+      ],
+      "id": "ef5c4b3b-616c-406d-97ab-c76dea8dba87",
+      "name": "Pick most recent 5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bd6e41e2-6d17-45ef-bee5-bc0dc9b7fb4b",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "2902b877-f161-4fa6-94db-c30cb6795246",
+              "name": "description",
+              "value": "={{ $json.contentSnippet }}",
+              "type": "string"
+            },
+            {
+              "id": "57cb2c54-82e5-42cf-b723-edbf7bc9a6ca",
+              "name": "content:encoded",
+              "value": "={{ $json.content }}",
+              "type": "string"
+            },
+            {
+              "id": "df0c76e0-4fc3-4cb2-8e6b-4324b70003cb",
+              "name": "pubDate",
+              "value": "={{ $json.pubDate }}",
+              "type": "string"
+            },
+            {
+              "id": "9b50e79d-5050-4aa0-94c1-f0ae22ba344a",
+              "name": "url",
+              "value": "={{ $json.link }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -784,
+        -304
+      ],
+      "id": "136e59c9-9820-488f-9882-27ea6fb70c9b",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code Node: Prepare Single Articles for AI Analysis\nconst items = $input.all();\n\nreturn items.map((item, index) => {\n    // Extract clean text from content:encoded\n    const contentEncoded = item.json['content:encoded'] || '';\n    const cleanContent = contentEncoded\n        .replace(/<[^>]*>/g, ' ')\n        .replace(/&nbsp;/g, ' ')\n        .replace(/&#8217;/g, \"'\")\n        .replace(/&#8220;|&#8221;/g, '\"')\n        .replace(/&amp;/g, '&')\n        .replace(/\\s+/g, ' ')\n        .trim();\n    \n    return {\n        json: {\n            id: index,\n            title: item.json.title || '',\n            description: item.json.description || '',\n            content: cleanContent.substring(0, 2000),\n            url: item.json.url || '',\n            pubDate: item.json.pubDate || '',\n            original_data: item.json\n        }\n    };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -624,
+        -304
+      ],
+      "id": "842e9e0b-e2f9-45e9-b656-8842080a145d",
+      "name": "Prepare for filtering1"
+    },
+    {
+      "parameters": {
+        "url": "https://www.google.com.ng/alerts/feeds/04191773567166014170/10122071728173733796",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -1104,
+        -304
+      ],
+      "id": "ac5a2051-201f-437f-9589-17adfd5ab04f",
+      "name": "RSS Read1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop through each item in the incoming data\nfor (const item of items) {\n  try {\n    const googleUrl = item.json.link;\n\n    // Check if the link exists and contains the Google pattern\n    if (googleUrl && googleUrl.includes('google.com/url') && googleUrl.includes('url=')) {\n      \n      // Method: Split the string to grab everything after 'url='\n      // We use split to handle cases where the URL might not be fully encoded\n      let rawSplit = googleUrl.split('url=')[1];\n      \n      // If you want the CLEAN link (Recommended - removes &ct, &usg, etc.)\n      // We split by '&' to stop where the Google parameters start\n      let cleanLink = rawSplit.split('&')[0];\n      \n      // Decode the URL just in case it contains %20 or other encoded characters\n      cleanLink = decodeURIComponent(cleanLink);\n\n      // Update the item's link field\n      item.json.link = cleanLink;\n    }\n    \n  } catch (error) {\n    // If something goes wrong with one link, skip it and continue to the next\n    continue;\n  }\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -944,
+        -304
+      ],
+      "id": "d2d9c494-08f3-4f76-9274-56fbca5ad86c",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code Node: Get 5 Most Recent Items (Sorted by Date)\nconst items = $input.all();\n\n// Sort by pubDate (newest first)\nconst sortedItems = items.sort((a, b) => {\n    const dateA = new Date(a.json.pubDate || a.json.date || 0);\n    const dateB = new Date(b.json.pubDate || b.json.date || 0);\n    \n    // Sort descending (newest first)\n    return dateB - dateA;\n});\n\n// Take the first 10\nconst recentItems = sortedItems.slice(0, 5);\n\nreturn recentItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        -304
+      ],
+      "id": "ab4c2dd2-0d17-4edf-9a92-4c646430f6a3",
+      "name": "Pick most recent "
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-5-20250929",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1008,
+        624
+      ],
+      "id": "0ad9d5f5-6222-4a9e-b0da-226cd4ec94ba",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "YOUR_ANTHROPICAPI_CREDENTIAL_ID",
+          "name": "Anthropic Claude API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-5-20250929",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1248,
+        -112
+      ],
+      "id": "c1dc0ef8-d6fb-48b3-8e4d-a0d29eb730ca",
+      "name": "Anthropic Chat Model1",
+      "credentials": {
+        "anthropicApi": {
+          "id": "YOUR_ANTHROPICAPI_CREDENTIAL_ID",
+          "name": "Anthropic Claude API"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Schedule Trigger1": [
+      {
+        "json": {
+          "timestamp": "2026-01-13T16:01:27.008+01:00",
+          "Readable date": "January 13th 2026, 4:01:27 pm",
+          "Readable time": "4:01:27 pm",
+          "Day of week": "Tuesday",
+          "Year": "2026",
+          "Month": "January",
+          "Day of month": "13",
+          "Hour": "16",
+          "Minute": "01",
+          "Second": "27",
+          "Timezone": "Africa/Lagos (UTC+01:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Article_Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "TweetBot",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tweet": {
+      "ai_tool": [
+        [
+          {
+            "node": "TweetBot",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "ThreadBot",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_thread_tweets": {
+      "ai_tool": [
+        [
+          {
+            "node": "ThreadBot",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_top_tweet": {
+      "ai_tool": [
+        [
+          {
+            "node": "ThreadBot",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "delay": {
+      "ai_tool": [
+        [
+          {
+            "node": "ThreadBot",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Prepare for filtering",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Parse and merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Analyse articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse and merge": {
+      "main": [
+        [
+          {
+            "node": "Sort based on company mentions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort based on company mentions": {
+      "main": [
+        [
+          {
+            "node": "Halt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pick first item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 5 secs": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyse articles": {
+      "main": [
+        [
+          {
+            "node": "Wait 5 secs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick first item": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare for filtering": {
+      "main": [
+        [
+          {
+            "node": "Pick most recent 5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "ThreadBot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "RSS Read1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Parse and merge1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Analyse articles1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse and merge1": {
+      "main": [
+        [
+          {
+            "node": "Sort based on company mentions1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort based on company mentions1": {
+      "main": [
+        [
+          {
+            "node": "Halt1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pick first item1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 5 secs1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyse articles1": {
+      "main": [
+        [
+          {
+            "node": "Wait 5 secs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick first item1": {
+      "main": [
+        [
+          {
+            "node": "Markdown1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "TweetBot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick most recent 5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Prepare for filtering1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare for filtering1": {
+      "main": [
+        [
+          {
+            "node": "Pick most recent ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick most recent ": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ThreadBot",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "TweetBot",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "GENERATED_ON_IMPORT",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "YOUR_N8N_INSTANCE_ID"
+  },
+  "id": "GENERATED_ON_IMPORT",
+  "tags": []
+}
